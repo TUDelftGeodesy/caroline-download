@@ -68,7 +68,7 @@ def get_config(args):
 
     try:
         assert config.download.query.roi.exists()
-    except:
+    except AssertionError:
         print(f"No such file: {config.download.query.roi}")
         sys.exit(1)
 
