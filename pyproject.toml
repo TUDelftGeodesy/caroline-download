@@ -28,8 +28,8 @@ dependencies= [
 ]
 
 classifiers = [
-    "Development Status :: 2 - Pre-Alpha"
-    "Environment :: Console"
+    "Development Status :: 2 - Pre-Alpha",
+    "Environment :: Console",
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
