@@ -98,7 +98,8 @@ def main():
             logger.addHandler(file_log)
         except Exception as err:
             # Abort if we cannot create the log file as requested
-            logger.fatal(f"Failed to create log file {args.log_file}. Reason: {err}. Aborting.")
+            logger.fatal(f"Failed to create log file {args.log_file}. "
+                         + f"Reason: {err}. Aborting.")
             sys.exit(1)
 
     logger.info(f"Starting {PROGRAM_NAME}"
