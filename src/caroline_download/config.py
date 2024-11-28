@@ -91,15 +91,15 @@ def get_config(args):
     if args.config:
         config_file = args.config
 
-    # Make sure config_file exists
-    if os.path.exists(config_file):
-        # Open config file and read into config_dict
-        with open(config_file, 'r') as config_file:
-            config_dict = yaml.safe_load(config_file)
-    else:
+    # Check that the config file exists before we read it
+    if not os.path.exists(config_file):
         # Config file does not exist
         print(f'ERROR: File not found: {config_file}', file=sys.stderr)
         sys.exit(1)
+
+    # Open config file and read into config_dict
+    with open(config_file, 'r') as config_file:
+        config_dict = yaml.safe_load(config_file)
 
     if not any((args.geo_search, args.product_search)):
         print('ERROR: You must use either the --geo-search '
