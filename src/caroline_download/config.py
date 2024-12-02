@@ -45,7 +45,7 @@ class GeoSearch:
 
 @dataclass
 class Download:
-    dest_dir: pathlib.Path
+    base_directory: pathlib.Path
     force: bool = False
     dry_run: Optional[bool] = False
 
