@@ -117,11 +117,11 @@ def get_config(args):
         sys.exit(1)
 
     # If CONFIG_DIR is set, set config file to
-    # CONFIG_DIR/caroline_download.yaml
+    # CONFIG_DIR/caroline_download.yml
     if os.environ.get('CAROLINE_DOWNLOAD_CONFIG_DIR'):
         config_file = os.path.join(
                 os.environ['CAROLINE_DOWNLOAD_CONFIG_DIR'],
-                'caroline-download.yaml'
+                'caroline-download.yml'
                 )
     # If config argument is used, use that config file in stead
     if args.config:
