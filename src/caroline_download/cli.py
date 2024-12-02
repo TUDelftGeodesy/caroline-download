@@ -37,7 +37,10 @@ def main():
                 f" v{importlib.metadata.version('caroline-download')}")
     logger.info(f"Configuration: {config}")
 
-    download(config, logger)
+    download(download_config=config.download,
+             geo_search=config.geo_search,
+             product_search=config.product_search,
+             )
 
 
 def parse_args():

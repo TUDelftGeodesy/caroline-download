@@ -1,5 +1,4 @@
 # download.py
 
-def download(config, logger):
-    logger.info('downloading')
-    logger.info(config.download.dest_dir)
+def download(download_config, geo_search=None, product_search=None):
+    print(download_config)
