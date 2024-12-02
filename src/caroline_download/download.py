@@ -12,5 +12,4 @@ logger.addHandler(logging.NullHandler())
 
 
 def download(download_config, geo_search=None, product_search=None):
-    print(__name__)
     logger.info('Starting download')
