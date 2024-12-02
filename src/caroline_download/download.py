@@ -13,3 +13,10 @@ logger.addHandler(logging.NullHandler())
 
 def download(download_config, geo_search=None, product_search=None):
     logger.info('Starting download')
+    logger.info(f"Download configuration: {download_config}")
+
+    if geo_search:
+        logger.info(f"Geo search: {geo_search}")
+
+    if product_search:
+        logger.info(f"Product search: {product_search}")
