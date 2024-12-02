@@ -31,7 +31,7 @@ def main():
     config = get_config(args=args)
 
     # Setup logging
-    logger = setup_logging(config=config)
+    logger = setup_logging(log_config=config.logging)
 
     logger.info(f"Starting {PROGRAM_NAME}"
                 f" v{importlib.metadata.version('caroline-download')}")
@@ -88,26 +88,26 @@ def parse_args():
     return parser.parse_args()
 
 
-def setup_logging(config):
+def setup_logging(log_config):
     logger = logging.getLogger(PROGRAM_NAME)
-    logger.setLevel(config.logging.console_log.level.value)
+    logger.setLevel(log_config.console_log.level.value)
     logger.propagate = False
 
-    formatter = logging.Formatter(config.logging.console_log.format)
+    formatter = logging.Formatter(log_config.console_log.format)
 
     console_log = logging.StreamHandler(sys.stdout)
-    console_log.setLevel(config.logging.console_log.level.value)
+    console_log.setLevel(log_config.console_log.level.value)
     console_log.setFormatter(formatter)
     logger.addHandler(console_log)
 
     # Log to file if requested from command line
-    if config.logging.file_log.file:
+    if log_config.file_log.file:
         try:
-            file_log = TimedRotatingFileHandler(config.logging.file_log.file,
+            file_log = TimedRotatingFileHandler(log_config.file_log.file,
                                                 when='midnight',
                                                 backupCount=31
                                                 )
-            file_log.setLevel(config.logging.file_log.level.value)
+            file_log.setLevel(log_config.file_log.level.value)
             file_log.setFormatter(formatter)
             logger.addHandler(file_log)
         except Exception as err:
