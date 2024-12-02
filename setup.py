@@ -1,6 +1,6 @@
 # setup.py
 
-# This file is a stub, mainly to enable editable installs 
+# This file is a stub, mainly to enable editable installs
 # for development purposes
 
 from setuptools import setup

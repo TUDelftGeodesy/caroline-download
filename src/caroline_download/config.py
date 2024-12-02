@@ -25,6 +25,7 @@ DEFAULT_LOG_FORMAT = ('%(asctime)s'
                       + ' - %(message)s'
                       )
 
+
 class LogLevel(Enum):
     CRITICAL = logging.CRITICAL
     ERROR = logging.ERROR
@@ -33,18 +34,21 @@ class LogLevel(Enum):
     DEBUG = logging.DEBUG
     NOTSET = logging.NOTSET
 
-@dataclass 
+
+@dataclass
 class GeoSearch:
     start: datetime.datetime
     end: datetime.datetime
     roi_wkt_file: pathlib.Path
     relative_orbits: List[int]
 
-@dataclass 
+
+@dataclass
 class Download:
     dest_dir: pathlib.Path
     force: bool = False
     dry_run: Optional[bool] = False
+
 
 @dataclass
 class ConsoleLog:
@@ -52,11 +56,13 @@ class ConsoleLog:
     level: LogLevel = LogLevel[DEFAULT_LOG_LEVEL]
     format: str = DEFAULT_LOG_FORMAT
 
+
 @dataclass
 class FileLog:
     file: Optional[pathlib.Path]
     level: LogLevel = LogLevel[DEFAULT_LOG_LEVEL]
     format: str = DEFAULT_LOG_FORMAT
+
 
 @dataclass
 class Log:
@@ -71,7 +77,8 @@ class Log:
                         format=DEFAULT_LOG_FORMAT
                         )
 
-@dataclass 
+
+@dataclass
 class Config:
     download: Download
     geo_search: Optional[GeoSearch]
@@ -89,11 +96,13 @@ class Config:
                        )
                )
 
+
 converters = {
         pathlib.Path: pathlib.Path,
         datetime.datetime: lambda x: dateparser.parse(x),
         LogLevel: lambda x: LogLevel[x]
         }
+
 
 def get_config(args):
 
@@ -107,7 +116,7 @@ def get_config(args):
         print('ERROR: No configuration specified. Aborting.', file=sys.stderr)
         sys.exit(1)
 
-    # If CONFIG_DIR is set, set config file to 
+    # If CONFIG_DIR is set, set config file to
     # CONFIG_DIR/caroline_download.yaml
     if os.environ.get('CAROLINE_DOWNLOAD_CONFIG_DIR'):
         config_file = os.path.join(

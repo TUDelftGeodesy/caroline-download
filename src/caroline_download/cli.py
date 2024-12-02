@@ -21,6 +21,7 @@ Currently only downloads SENTINEL-1 SLC products from
 ASF (Alaska Satellite Facility) with authentication using .netrc
 """
 
+
 def main():
 
     # Parse arguments and store result in args variable
@@ -111,7 +112,7 @@ def setup_logging(config):
             logger.addHandler(file_log)
         except Exception as err:
             # Abort if we cannot create the log file as requested
-            logger.fatal(f"Failed to create log file {args.log_file}. "
+            logger.fatal("Failed to create log file. "
                          + f"Reason: {err}. Aborting.")
             sys.exit(1)
 
