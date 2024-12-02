@@ -44,12 +44,32 @@ class GeoSearch:
 class Download:
     dest_dir: pathlib.Path
     force: bool = False
+    dry_run: Optional[bool] = False
 
 @dataclass
-class Log:
+class ConsoleLog:
+    enable: bool = True
+    level: LogLevel = LogLevel[DEFAULT_LOG_LEVEL]
+    format: str = DEFAULT_LOG_FORMAT
+
+@dataclass
+class FileLog:
     file: Optional[pathlib.Path]
     level: LogLevel = LogLevel[DEFAULT_LOG_LEVEL]
     format: str = DEFAULT_LOG_FORMAT
+
+@dataclass
+class Log:
+    console_log: ConsoleLog = ConsoleLog(
+                            enable=True,
+                            level=LogLevel[DEFAULT_LOG_LEVEL],
+                            format=DEFAULT_LOG_FORMAT
+                            )
+    file_log: FileLog = FileLog(
+                        file=None,
+                        level=LogLevel[DEFAULT_LOG_LEVEL],
+                        format=DEFAULT_LOG_FORMAT
+                        )
 
 @dataclass 
 class Config:
@@ -57,10 +77,17 @@ class Config:
     geo_search: Optional[GeoSearch]
     product_search: Optional[str]
     log: Log = Log(
-            file=None,
-            level=LogLevel[DEFAULT_LOG_LEVEL],
-            format=DEFAULT_LOG_FORMAT
-            )
+                   console_log=ConsoleLog(
+                               enable=True,
+                               level=LogLevel[DEFAULT_LOG_LEVEL],
+                               format=DEFAULT_LOG_FORMAT
+                               ),
+                   file_log=FileLog(
+                       file=None,
+                       level=LogLevel[DEFAULT_LOG_LEVEL],
+                       format=DEFAULT_LOG_FORMAT
+                       )
+               )
 
 converters = {
         pathlib.Path: pathlib.Path,
@@ -130,16 +157,16 @@ def get_config(args):
         config.download.force = True
 
     if args.dry_run:
-        pass
+        config.download.dry_run = True
 
     if args.log_file:
-        config.log.file = args.log_file
+        config.log.file_log.file = args.log_file
 
     if args.log_level:
-        pass
+        config.log.console_log.level = LogLevel[args.log_level.upper()]
 
     if args.quiet:
-        pass
+        config.log.console_log.level = LogLevel['NOTSET']
 
     if not config.geo_search.roi_wkt_file.exists():
         print(f"ERROR: No such file: {config.geo_search.roi_wkt_file}",

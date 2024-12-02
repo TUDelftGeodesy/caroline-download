@@ -22,8 +22,25 @@ ASF (Alaska Satellite Facility) with authentication using .netrc
 """
 
 def main():
-    # Parse arguments
 
+    # Parse arguments and store result in args variable
+    args = parse_args()
+
+    # Build configuration
+    config = get_config(args)
+
+    # Setup logging
+    logger = setup_logging(config)
+
+    logger.info(f"Starting {PROGRAM_NAME}"
+                f" v{importlib.metadata.version('caroline-download')}")
+    #logger.debug(f"Configuration: {config}")
+    logger.info(f"Configuration: {config}")
+
+    download(config, logger)
+
+
+def parse_args():
     # Create argument parser
     parser = argparse.ArgumentParser(
             prog=PROGRAM_NAME,
@@ -64,36 +81,33 @@ def main():
             )
     parser.add_argument(
             '--quiet',
+            action='store_true',
             help='do not log anything to stderr'
             )
 
-    # Parse arguments and store result in args variable
-    args = parser.parse_args()
+    return parser.parse_args()
 
-    # Build configuration
-    config = get_config(args)
 
-    # Setup logging
+def setup_logging(config):
     logger = logging.getLogger(PROGRAM_NAME)
-    logger.setLevel(config.log.level.value)
-    #logger.setLevel(logging.NOTSET)
+    logger.setLevel(config.log.console_log.level.value)
     logger.propagate = False
 
-    formatter = logging.Formatter(config.log.format)
+    formatter = logging.Formatter(config.log.console_log.format)
 
     console_log = logging.StreamHandler(sys.stdout)
-    console_log.setLevel(config.log.level.value)
+    console_log.setLevel(config.log.console_log.level.value)
     console_log.setFormatter(formatter)
     logger.addHandler(console_log)
 
     # Log to file if requested from command line
-    if config.log.file:
+    if config.log.file_log.file:
         try:
-            file_log = TimedRotatingFileHandler(config.log.file,
+            file_log = TimedRotatingFileHandler(config.log.file_log.file,
                                                 when='midnight',
                                                 backupCount=31
                                                 )
-            file_log.setLevel(config.log.level.value)
+            file_log.setLevel(config.log.file_log.level.value)
             file_log.setFormatter(formatter)
             logger.addHandler(file_log)
         except Exception as err:
@@ -102,10 +116,7 @@ def main():
                          + f"Reason: {err}. Aborting.")
             sys.exit(1)
 
-    logger.info(f"Starting {PROGRAM_NAME}"
-                f" v{importlib.metadata.version('caroline-download')}")
-    logger.debug(f"Configuration: {config}")
+    return logger
 
-    download(config, logger)
-    
+
 # Eof
