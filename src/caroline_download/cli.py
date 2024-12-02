@@ -89,24 +89,24 @@ def parse_args():
 
 def setup_logging(config):
     logger = logging.getLogger(PROGRAM_NAME)
-    logger.setLevel(config.log.console_log.level.value)
+    logger.setLevel(config.logging.console_log.level.value)
     logger.propagate = False
 
-    formatter = logging.Formatter(config.log.console_log.format)
+    formatter = logging.Formatter(config.logging.console_log.format)
 
     console_log = logging.StreamHandler(sys.stdout)
-    console_log.setLevel(config.log.console_log.level.value)
+    console_log.setLevel(config.logging.console_log.level.value)
     console_log.setFormatter(formatter)
     logger.addHandler(console_log)
 
     # Log to file if requested from command line
-    if config.log.file_log.file:
+    if config.logging.file_log.file:
         try:
-            file_log = TimedRotatingFileHandler(config.log.file_log.file,
+            file_log = TimedRotatingFileHandler(config.logging.file_log.file,
                                                 when='midnight',
                                                 backupCount=31
                                                 )
-            file_log.setLevel(config.log.file_log.level.value)
+            file_log.setLevel(config.logging.file_log.level.value)
             file_log.setFormatter(formatter)
             logger.addHandler(file_log)
         except Exception as err:

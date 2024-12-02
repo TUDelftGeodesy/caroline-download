@@ -76,7 +76,7 @@ class Config:
     download: Download
     geo_search: Optional[GeoSearch]
     product_search: Optional[str]
-    log: Log = Log(
+    logging: Log = Log(
                    console_log=ConsoleLog(
                                enable=True,
                                level=LogLevel[DEFAULT_LOG_LEVEL],
@@ -160,13 +160,13 @@ def get_config(args):
         config.download.dry_run = True
 
     if args.log_file:
-        config.log.file_log.file = args.log_file
+        config.logging.file_log.file = args.log_file
 
     if args.log_level:
-        config.log.console_log.level = LogLevel[args.log_level.upper()]
+        config.logging.console_log.level = LogLevel[args.log_level.upper()]
 
     if args.quiet:
-        config.log.console_log.level = LogLevel['NOTSET']
+        config.logging.console_log.level = LogLevel['NOTSET']
 
     if not config.geo_search.roi_wkt_file.exists():
         print(f"ERROR: No such file: {config.geo_search.roi_wkt_file}",
