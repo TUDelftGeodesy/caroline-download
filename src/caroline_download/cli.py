@@ -27,10 +27,10 @@ def main():
     args = parse_args()
 
     # Build configuration
-    config = get_config(args)
+    config = get_config(args=args)
 
     # Setup logging
-    logger = setup_logging(config)
+    logger = setup_logging(config=config)
 
     logger.info(f"Starting {PROGRAM_NAME}"
                 f" v{importlib.metadata.version('caroline-download')}")
