@@ -118,5 +118,4 @@ def setup_logging(config):
 
     return logger
 
-
 # Eof
