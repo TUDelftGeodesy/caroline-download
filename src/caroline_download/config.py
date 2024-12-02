@@ -178,11 +178,12 @@ def get_config(args):
     if args.quiet:
         config.logging.console_log.level = LogLevel['NOTSET']
 
-    if not config.geo_search.roi_wkt_file.exists():
-        print(f"ERROR: No such file: {config.geo_search.roi_wkt_file}",
-              file=sys.stderr
-              )
-        sys.exit(1)
+    if config.geo_search:
+        if not config.geo_search.roi_wkt_file.exists():
+            print(f"ERROR: No such file: {config.geo_search.roi_wkt_file}",
+                  file=sys.stderr
+                  )
+            sys.exit(1)
 
     return config
 
