@@ -67,7 +67,7 @@ def parse_args():
     parser.add_argument(
             '--force',
             action='store_true',
-            help='force downloading, even if a product already exists'
+            help='force downloading, even if a product already exists locally'
             )
     parser.add_argument(
             '--verify',
