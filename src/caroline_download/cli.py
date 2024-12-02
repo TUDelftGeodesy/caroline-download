@@ -70,6 +70,11 @@ def parse_args():
             help='force downloading, even if a product already exists'
             )
     parser.add_argument(
+            '--verify',
+            action='store_true',
+            help='verify checksum after downloading'
+            )
+    parser.add_argument(
             '--dry-run',
             action='store_true',
             help='perform dry run. do not actually download anything'

@@ -48,6 +48,7 @@ class Download:
     base_directory: pathlib.Path
     force: bool = False
     dry_run: Optional[bool] = False
+    verify: bool = True
 
 
 @dataclass
