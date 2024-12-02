@@ -34,7 +34,6 @@ def main():
 
     logger.info(f"Starting {PROGRAM_NAME}"
                 f" v{importlib.metadata.version('caroline-download')}")
-    #logger.debug(f"Configuration: {config}")
     logger.info(f"Configuration: {config}")
 
     download(config, logger)
