@@ -95,6 +95,9 @@ def setup_logging(log_config):
     logger = logging.getLogger(PROGRAM_NAME)
     logger.setLevel(log_config.console_log.level.value)
     logger.propagate = False
+    download_logger = logging.getLogger('caroline_download.download')
+    download_logger.setLevel(log_config.console_log.level.value)
+    download_logger.propagate = False
 
     formatter = logging.Formatter(log_config.console_log.format)
 
@@ -102,6 +105,7 @@ def setup_logging(log_config):
     console_log.setLevel(log_config.console_log.level.value)
     console_log.setFormatter(formatter)
     logger.addHandler(console_log)
+    download_logger.addHandler(console_log)
 
     # Log to file if requested from command line
     if log_config.file_log.file:
@@ -113,6 +117,7 @@ def setup_logging(log_config):
             file_log.setLevel(log_config.file_log.level.value)
             file_log.setFormatter(formatter)
             logger.addHandler(file_log)
+            download_logger.addHandler(file_log)
         except Exception as err:
             # Abort if we cannot create the log file as requested
             logger.fatal("Failed to create log file. "
