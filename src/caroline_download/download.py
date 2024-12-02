@@ -10,6 +10,7 @@ import logging
 CAROLINE_DOWNLOAD_LOGGER = logging.getLogger(__name__)
 CAROLINE_DOWNLOAD_LOGGER.addHandler(logging.NullHandler())
 
+
 def download(download_config, geo_search=None, product_search=None):
     print(__name__)
     CAROLINE_DOWNLOAD_LOGGER.info('Starting download')
