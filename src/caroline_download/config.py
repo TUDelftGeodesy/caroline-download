@@ -37,10 +37,12 @@ class LogLevel(Enum):
 
 @dataclass
 class GeoSearch:
+    dataset: str
     start: datetime.datetime
     end: datetime.datetime
     roi_wkt_file: pathlib.Path
     relative_orbits: List[int]
+    product_type: str
 
 
 @dataclass

@@ -103,7 +103,22 @@ def download(download_config, geo_search=None, product_search=None):
         download_products(download_config, result)
 
     if geo_search:
-        logger.info(f"Geo search: {geo_search}")
+        logger.info(f"Performing geo search with {geo_search}")
+
+        # read wkt string from geo_search.roi_wkt_file into var
+        # TODO
+
+        # validate wkt string using shapely
+        # TODO
+
+        # perform search
+        result = asf.geo_search(dataset=geo_search.dataset,
+                                start=geo_search.start,
+                                end=geo_search.end,
+                                intersectsWith=geo_search.roi_wkt,
+                                relativeOrbit=geo_search.relative_orbits,
+                                processingLevel=geo_search.product_type
+                                )
 
     logger.info('Download done')
 

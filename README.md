@@ -5,3 +5,4 @@ caroline-download is a tool for downloading data that is processed by [caroline]
 ## Todo
 
 - Fix verify option
+- Create Enums for dataset and product_type
