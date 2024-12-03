@@ -107,6 +107,8 @@ def download(download_config, geo_search=None, product_search=None):
 
         # read wkt string from geo_search.roi_wkt_file into var
         # TODO
+        with open(geo_search.roi_wkt_file, 'r') as wkt_file:
+                  wkt_str = wkt_file.read().replace('\n', '')
 
         # validate wkt string using shapely
         # TODO
@@ -115,7 +117,7 @@ def download(download_config, geo_search=None, product_search=None):
         result = asf.geo_search(dataset=geo_search.dataset,
                                 start=geo_search.start,
                                 end=geo_search.end,
-                                intersectsWith=geo_search.roi_wkt,
+                                intersectsWith=wkt_str,
                                 relativeOrbit=geo_search.relative_orbits,
                                 processingLevel=geo_search.product_type
                                 )
