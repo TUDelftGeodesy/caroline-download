@@ -114,6 +114,7 @@ def download(download_config, geo_search=None, product_search=None):
         # TODO
 
         # perform search
+        # TODO split interval into montly intervals
         result = asf.geo_search(dataset=geo_search.dataset,
                                 start=geo_search.start,
                                 end=geo_search.end,
