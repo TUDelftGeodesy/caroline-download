@@ -93,9 +93,9 @@ def download(download_config, geo_search=None, product_search=None):
         product_count = len(result)
 
         if product_count > 1:
-            logger.error('Found more than one product while performing product search. '
-                         'This should not happen according to the ASF api documentation. '
-                         'Aborting.'
+            logger.error('Found more than one product while performing '
+                         'product search. This should not happen according '
+                         'to the ASF api documentation. Aborting.'
                          )
             sys.exit(1)
 
@@ -108,7 +108,7 @@ def download(download_config, geo_search=None, product_search=None):
         # read wkt string from geo_search.roi_wkt_file into var
         # TODO
         with open(geo_search.roi_wkt_file, 'r') as wkt_file:
-                  wkt_str = wkt_file.read().replace('\n', '')
+            wkt_str = wkt_file.read().replace('\n', '')
 
         # validate wkt string using shapely
         # TODO
