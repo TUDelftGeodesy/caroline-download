@@ -97,37 +97,53 @@ def parse_args():
 
 
 def setup_logging(log_config):
-    logger = logging.getLogger(PROGRAM_NAME)
-    logger.setLevel(log_config.console_log.level.value)
-    logger.propagate = False
-    download_logger = logging.getLogger('caroline_download.download')
-    download_logger.setLevel(log_config.console_log.level.value)
-    download_logger.propagate = False
-
-    formatter = logging.Formatter(log_config.console_log.format)
-
     console_log = logging.StreamHandler(sys.stdout)
+    console_log_format = logging.Formatter(log_config.console_log.format)
     console_log.setLevel(log_config.console_log.level.value)
-    console_log.setFormatter(formatter)
-    logger.addHandler(console_log)
-    download_logger.addHandler(console_log)
+    console_log.setFormatter(console_log_format)
 
-    # Log to file if requested from command line
     if log_config.file_log.file:
         try:
             file_log = TimedRotatingFileHandler(log_config.file_log.file,
                                                 when='midnight',
                                                 backupCount=31
                                                 )
+            file_log_format = logging.Formatter(log_config.file_log.format)
             file_log.setLevel(log_config.file_log.level.value)
-            file_log.setFormatter(formatter)
-            logger.addHandler(file_log)
-            download_logger.addHandler(file_log)
+            file_log.setFormatter(file_log_format)
         except Exception as err:
             # Abort if we cannot create the log file as requested
-            logger.fatal("Failed to create log file. "
-                         + f"Reason: {err}. Aborting.")
+            print("Failed to create log file. "
+                  + f"Reason: {err}. Aborting.",
+                  file=sys.stderr)
             sys.exit(1)
+
+    root_logger = logging.getLogger()
+    root_logger.setLevel(log_config.console_log.level.value)
+    root_logger.addHandler(console_log)
+    if log_config.file_log.file:
+        root_logger.addHandler(file_log)
+
+    logger = logging.getLogger(PROGRAM_NAME)
+    logger.setLevel(log_config.console_log.level.value)
+    logger.propagate = False
+    logger.addHandler(console_log)
+    if log_config.file_log.file:
+        logger.addHandler(file_log)
+
+    download_logger = logging.getLogger('caroline_download.download')
+    download_logger.setLevel(log_config.console_log.level.value)
+    download_logger.propagate = False
+    download_logger.addHandler(console_log)
+    if log_config.file_log.file:
+        download_logger.addHandler(file_log)
+
+    asf_logger = logging.getLogger('asf-search')
+    asf_logger.setLevel(log_config.console_log.level.value)
+    asf_logger.propagate = False
+    asf_logger.addHandler(console_log)
+    if log_config.file_log.file:
+        asf_logger.addHandler(file_log)
 
     return logger
 
