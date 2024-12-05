@@ -174,6 +174,11 @@ def get_config(args):
 
     if args.log_level:
         config.logging.console_log.level = LogLevel[args.log_level.upper()]
+        config.logging.file_log.level = LogLevel[args.log_level.upper()]
+        config.logging.root_logger.level = LogLevel[args.log_level.upper()]
+        config.logging.cli_logger.level = LogLevel[args.log_level.upper()]
+        config.logging.download_logger.level = LogLevel[args.log_level.upper()]
+        config.logging.asf_logger.level = LogLevel[args.log_level.upper()]
 
     if args.quiet:
         config.logging.console_log.level = LogLevel['NOTSET']
