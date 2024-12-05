@@ -106,7 +106,6 @@ def download(download_config, geo_search=None, product_search=None):
         logger.info(f"Performing geo search with {geo_search}")
 
         # read wkt string from geo_search.roi_wkt_file into var
-        # TODO
         with open(geo_search.roi_wkt_file, 'r') as wkt_file:
             wkt_str = wkt_file.read().replace('\n', '')
 
@@ -122,6 +121,10 @@ def download(download_config, geo_search=None, product_search=None):
                                 relativeOrbit=geo_search.relative_orbits,
                                 processingLevel=geo_search.product_type
                                 )
+
+        product_count = len(result)
+        logger.info(f"Found {str(product_count)} products")
+        download_products(download_config, result)
 
     logger.info('Download done')
 
@@ -157,23 +160,25 @@ def download_product(download_config, product):
                      'Force option set. '
                      'Removing file: {target_file}'
                      )
-        os.remove(target_file)
+        if not download_config.dry_run:
+            os.remove(target_file)
 
     logger.debug('Creating directories')
-    os.makedirs(target_directory, exist_ok=True)
+    if not download_config.dry_run:
+        os.makedirs(target_directory, exist_ok=True)
 
     logger.info(f"Downloading {product.properties['fileName']}")
     if not download_config.dry_run:
         product.download(path=target_directory)
 
-    if download_config.verify:
-        logger.info('Verifying checksum')
-        if verify_checksum(file=target_file,
-                           checksum=product.properties['md5sum']
-                           ):
-            logger.info('Checksum OK')
-        else:
-            logger.error('Checksum FAILED')
+        if download_config.verify:
+            logger.info('Verifying checksum')
+            if verify_checksum(file=target_file,
+                               checksum=product.properties['md5sum']
+                               ):
+                logger.info('Checksum OK')
+            else:
+                logger.error('Checksum FAILED')
 
 
 def verify_checksum(file, checksum):
