@@ -1,8 +1,10 @@
 # download.py
 
 import hashlib
+import json
 import logging
 import os
+import pathlib
 import sys
 
 import asf_search as asf
@@ -179,6 +181,14 @@ def download_product(download_config, product):
                 logger.info('Checksum OK')
             else:
                 logger.error('Checksum FAILED')
+                return
+
+        product_geojson_file = str(target_file)[:-4] + ".json"
+        logger.info("Saving product geojson to "
+                    f"{product_geojson_file}")
+        f = open(product_geojson_file, 'w')
+        f.write(json.dumps(product.geojson(), indent=2))
+        f.close()
 
 
 def verify_checksum(file, checksum):
