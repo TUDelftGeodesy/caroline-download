@@ -26,15 +26,6 @@ DEFAULT_LOG_FORMAT = ('%(asctime)s'
                       )
 
 
-class LogLevel(Enum):
-    CRITICAL = logging.CRITICAL
-    ERROR = logging.ERROR
-    WARNING = logging.WARNING
-    INFO = logging.INFO
-    DEBUG = logging.DEBUG
-    NOTSET = logging.NOTSET
-
-
 @dataclass
 class GeoSearch:
     dataset: str
@@ -53,6 +44,20 @@ class Download:
     verify: bool = True
 
 
+class LogLevel(Enum):
+    CRITICAL = logging.CRITICAL
+    ERROR = logging.ERROR
+    WARNING = logging.WARNING
+    INFO = logging.INFO
+    DEBUG = logging.DEBUG
+    NOTSET = logging.NOTSET
+
+
+@dataclass
+class Logger:
+    level: LogLevel = LogLevel[DEFAULT_LOG_LEVEL]
+
+
 @dataclass
 class ConsoleLog:
     enable: bool = True
@@ -68,7 +73,7 @@ class FileLog:
 
 
 @dataclass
-class Log:
+class Logging:
     console_log: ConsoleLog = ConsoleLog(
                             enable=True,
                             level=LogLevel[DEFAULT_LOG_LEVEL],
@@ -79,6 +84,10 @@ class Log:
                         level=LogLevel[DEFAULT_LOG_LEVEL],
                         format=DEFAULT_LOG_FORMAT
                         )
+    root_logger: Logger = Logger(level=LogLevel['WARNING'])
+    cli_logger: Logger = Logger(level=LogLevel[DEFAULT_LOG_LEVEL])
+    download_logger: Logger = Logger(level=LogLevel[DEFAULT_LOG_LEVEL])
+    asf_logger: Logger = Logger(level=LogLevel['WARNING'])
 
 
 @dataclass
@@ -86,18 +95,7 @@ class Config:
     download: Download
     geo_search: Optional[GeoSearch]
     product_search: Optional[str]
-    logging: Log = Log(
-                   console_log=ConsoleLog(
-                               enable=True,
-                               level=LogLevel[DEFAULT_LOG_LEVEL],
-                               format=DEFAULT_LOG_FORMAT
-                               ),
-                   file_log=FileLog(
-                       file=None,
-                       level=LogLevel[DEFAULT_LOG_LEVEL],
-                       format=DEFAULT_LOG_FORMAT
-                       )
-               )
+    logging: Logging = Logging()
 
 
 converters = {

@@ -119,32 +119,32 @@ def setup_logging(log_config):
             sys.exit(1)
 
     root_logger = logging.getLogger()
-    root_logger.setLevel(log_config.console_log.level.value)
+    root_logger.setLevel(log_config.root_logger.level.value)
     root_logger.addHandler(console_log)
     if log_config.file_log.file:
         root_logger.addHandler(file_log)
 
-    logger = logging.getLogger(PROGRAM_NAME)
-    logger.setLevel(log_config.console_log.level.value)
-    logger.propagate = False
-    logger.addHandler(console_log)
+    cli_logger = logging.getLogger(PROGRAM_NAME)
+    cli_logger.setLevel(log_config.cli_logger.level.value)
+    cli_logger.propagate = False
+    cli_logger.addHandler(console_log)
     if log_config.file_log.file:
-        logger.addHandler(file_log)
+        cli_logger.addHandler(file_log)
 
     download_logger = logging.getLogger('caroline_download.download')
-    download_logger.setLevel(log_config.console_log.level.value)
+    download_logger.setLevel(log_config.download_logger.level.value)
     download_logger.propagate = False
     download_logger.addHandler(console_log)
     if log_config.file_log.file:
         download_logger.addHandler(file_log)
 
     asf_logger = logging.getLogger('asf-search')
-    asf_logger.setLevel(log_config.console_log.level.value)
+    asf_logger.setLevel(log_config.asf_logger.level.value)
     asf_logger.propagate = False
     asf_logger.addHandler(console_log)
     if log_config.file_log.file:
         asf_logger.addHandler(file_log)
 
-    return logger
+    return cli_logger
 
 # Eof
