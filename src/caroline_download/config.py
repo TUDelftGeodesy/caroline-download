@@ -19,7 +19,7 @@ import yaml
 
 DEFAULT_LOG_LEVEL = 'INFO'
 DEFAULT_LOG_FORMAT = ('%(asctime)s'
-                      + ' - %(name)s'
+                      + ' - %(name)s:%(funcName)s'
                       + '[%(process)d]'
                       + ' - %(levelname)s'
                       + ' - %(message)s'
@@ -98,9 +98,13 @@ class Config:
     logging: Logging = Logging()
 
 
+def parse_datetime(datetime):
+    return dateparser.parse(datetime).replace(microsecond=0)
+
+
 converters = {
         pathlib.Path: pathlib.Path,
-        datetime.datetime: lambda x: dateparser.parse(x),
+        datetime.datetime: lambda x: parse_datetime(x),
         LogLevel: lambda x: LogLevel[x]
         }
 

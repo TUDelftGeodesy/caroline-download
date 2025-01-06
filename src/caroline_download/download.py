@@ -1,10 +1,11 @@
 # download.py
 
+from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 import hashlib
 import json
 import logging
 import os
-import pathlib
 import sys
 
 import asf_search as asf
@@ -116,17 +117,20 @@ def download(download_config, geo_search=None, product_search=None):
 
         # perform search
         # TODO split interval into montly intervals
-        result = asf.geo_search(dataset=geo_search.dataset,
-                                start=geo_search.start,
-                                end=geo_search.end,
-                                intersectsWith=wkt_str,
-                                relativeOrbit=geo_search.relative_orbits,
-                                processingLevel=geo_search.product_type
-                                )
+        for interval in split_into_monthly_intervals(geo_search.start,
+                                                     geo_search.end
+                                                     ):
+            result = asf.geo_search(dataset=geo_search.dataset,
+                                    start=interval[0],
+                                    end=interval[1],
+                                    intersectsWith=wkt_str,
+                                    relativeOrbit=geo_search.relative_orbits,
+                                    processingLevel=geo_search.product_type
+                                    )
 
-        product_count = len(result)
-        logger.info(f"Found {str(product_count)} products")
-        download_products(download_config, result)
+            product_count = len(result)
+            logger.info(f"Found {str(product_count)} products")
+            download_products(download_config, result)
 
     logger.info('Download done')
 
@@ -189,6 +193,39 @@ def download_product(download_config, product):
         f = open(product_geojson_file, 'w')
         f.write(json.dumps(product.geojson(), indent=2))
         f.close()
+
+
+def split_into_monthly_intervals(start_datetime, end_datetime):
+    """
+    Split interval into monthly intervals
+
+    Intervals are split on the end of the month
+    """
+
+    logger.debug(f"Splitting interval {start_datetime} - {end_datetime} "
+                 "into monthly intervals")
+    logger.debug(f"Log level: {logger.level}")
+    intervals = []
+    current_start = start_datetime
+
+    while current_start < end_datetime:
+        # Calculate the start of the next month
+        next_month_start = (
+                current_start
+                + relativedelta(months=1)).replace(day=1,
+                                                   hour=0,
+                                                   minute=0,
+                                                   second=0,
+                                                   microsecond=0)
+        # Calculate the end of the current interval (end of current month)
+        current_end = min(next_month_start - timedelta(seconds=1),
+                          end_datetime)
+        intervals.append((current_start, current_end))
+        current_start = next_month_start
+
+    logger.debug(f"Returning {len(intervals)} intervals")
+    logger.debug(f"{intervals}")
+    return intervals
 
 
 def verify_checksum(file, checksum):
