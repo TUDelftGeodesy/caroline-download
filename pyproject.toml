@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "caroline-download"
+version = "0.1.0"
+authors = [
+  { name="Niels Jansen", email="n.h.jansen@tudelft.nl" },
+]
+description = "A tool for downloading data processed by caroline"
+keywords = [
+    "caroline",
+    "download",
+    "InSAR",
+    "sentinel",
+    "SLC",
+    "ASF"
+]
+readme = {file = "README.md", content-type = "text/markdown"}
+license = {file = "LICENSE"}
+requires-python = ">=3.9"
+dependencies= [
+  'asf_search',
+  'dacite',
+  'dateparser',
+  'pyYAML',
+]
+
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Environment :: Console",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: GIS",
+]
+
+[project.scripts]
+caroline-download = "caroline_download.cli:main"
+
+[project.urls]
+Homepage = "https://bitbucket.org/grsradartudelft/caroline-download/"
