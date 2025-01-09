@@ -1,0 +1,27 @@
+site_name: Caroline Download Documentation
+repo_url: https://github.com/TUDelftGeodesy/caroline-download
+repo_name: caroline_download
+
+theme:
+  name: material
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+      primary: blue
+      accent: white
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+      primary: black
+      accent: pink
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - content.code.copy
