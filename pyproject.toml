@@ -37,6 +37,11 @@ classifiers = [
     "Topic :: Scientific/Engineering",
     "Topic :: Scientific/Engineering :: GIS",
 ]
+[project.optional-dependencies]
+dev = [
+    "pre-commit",
+    "ruff",
+]
 
 [project.scripts]
 caroline-download = "caroline_download.cli:main"
