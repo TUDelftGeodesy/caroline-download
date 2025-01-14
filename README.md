@@ -12,4 +12,4 @@ pip install git+https://github.com/TUDelftGeodesy/caroline-download.git@main
 
 ## Contributing
 
-See [CONTRIBUTING](./CONTRIBUTING .md).
+See [CONTRIBUTING](./CONTRIBUTING.md).
