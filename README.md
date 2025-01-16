@@ -1,6 +1,6 @@
 # caroline-download
 
-CAROLINE download is a tool for downloading data for processing by by [CAROLINE](https://bitbucket.org/grsradartudelft/caroline/src/main/). Currently it supports downloading SENTINEL-1 data from [ASF](https://asf.alaska.edu)
+CAROLINE download is a tool for downloading data for processing by by [CAROLINE](https://bitbucket.org/grsradartudelft/caroline/src/main/). Currently it supports downloading SENTINEL-1 data from [ASF](https://asf.alaska.edu).
 
 ## Installation
 
