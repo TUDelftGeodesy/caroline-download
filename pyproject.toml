@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "caroline-download"
-version = "0.1.0"
+dynamic = ["version"]
 authors = [
   { name="Niels Jansen", email="n.h.jansen@tudelft.nl" },
 ]
@@ -41,6 +41,7 @@ classifiers = [
 dev = [
     "pre-commit",
     "ruff",
+    "setuptools_scm",
 ]
 docs = [
     "mkdocs",
@@ -60,3 +61,4 @@ select = ["D"]
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
 
+[tool.setuptools_scm]
