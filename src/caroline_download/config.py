@@ -1,7 +1,10 @@
 # config.py
+"""Handle configuration for the CLI.
 
-# Implementation based on suggestions from:
-# https://tech.preferred.jp/en/blog/working-with-configuration-in-python/
+Implementation based on suggestions from:
+https://tech.preferred.jp/en/blog/working-with-configuration-in-python/
+
+"""
 
 import datetime
 from dataclasses import dataclass
@@ -17,17 +20,20 @@ import dacite
 import dateparser
 import yaml
 
-DEFAULT_LOG_LEVEL = 'INFO'
-DEFAULT_LOG_FORMAT = ('%(asctime)s'
-                      + ' - %(name)s:%(funcName)s'
-                      + '[%(process)d]'
-                      + ' - %(levelname)s'
-                      + ' - %(message)s'
-                      )
+DEFAULT_LOG_LEVEL = "INFO"
+DEFAULT_LOG_FORMAT = (
+    "%(asctime)s"
+    + " - %(name)s:%(funcName)s"
+    + "[%(process)d]"
+    + " - %(levelname)s"
+    + " - %(message)s"
+)
 
 
 @dataclass
 class GeoSearch:
+    """Data class for search configuration."""
+
     dataset: str
     start: datetime.datetime
     end: datetime.datetime
@@ -38,6 +44,8 @@ class GeoSearch:
 
 @dataclass
 class Download:
+    """Data class for download configuration."""
+
     base_directory: pathlib.Path
     force: bool = False
     dry_run: Optional[bool] = False
@@ -45,6 +53,8 @@ class Download:
 
 
 class LogLevel(Enum):
+    """Enum for logging levels."""
+
     CRITICAL = logging.CRITICAL
     ERROR = logging.ERROR
     WARNING = logging.WARNING
@@ -55,11 +65,15 @@ class LogLevel(Enum):
 
 @dataclass
 class Logger:
+    """Data class for logger configuration."""
+
     level: LogLevel = LogLevel[DEFAULT_LOG_LEVEL]
 
 
 @dataclass
 class ConsoleLog:
+    """Data class for console log handler configuration."""
+
     enable: bool = True
     level: LogLevel = LogLevel[DEFAULT_LOG_LEVEL]
     format: str = DEFAULT_LOG_FORMAT
@@ -67,6 +81,8 @@ class ConsoleLog:
 
 @dataclass
 class FileLog:
+    """Data class for file log handler configuration."""
+
     file: Optional[pathlib.Path]
     level: LogLevel = LogLevel[DEFAULT_LOG_LEVEL]
     format: str = DEFAULT_LOG_FORMAT
@@ -74,24 +90,24 @@ class FileLog:
 
 @dataclass
 class Logging:
+    """Data class for logging configuration."""
+
     console_log: ConsoleLog = ConsoleLog(
-                            enable=True,
-                            level=LogLevel[DEFAULT_LOG_LEVEL],
-                            format=DEFAULT_LOG_FORMAT
-                            )
+        enable=True, level=LogLevel[DEFAULT_LOG_LEVEL], format=DEFAULT_LOG_FORMAT
+    )
     file_log: FileLog = FileLog(
-                        file=None,
-                        level=LogLevel[DEFAULT_LOG_LEVEL],
-                        format=DEFAULT_LOG_FORMAT
-                        )
-    root_logger: Logger = Logger(level=LogLevel['WARNING'])
+        file=None, level=LogLevel[DEFAULT_LOG_LEVEL], format=DEFAULT_LOG_FORMAT
+    )
+    root_logger: Logger = Logger(level=LogLevel["WARNING"])
     cli_logger: Logger = Logger(level=LogLevel[DEFAULT_LOG_LEVEL])
     download_logger: Logger = Logger(level=LogLevel[DEFAULT_LOG_LEVEL])
-    asf_logger: Logger = Logger(level=LogLevel['WARNING'])
+    asf_logger: Logger = Logger(level=LogLevel["WARNING"])
 
 
 @dataclass
 class Config:
+    """Main configuration data class."""
+
     download: Download
     geo_search: Optional[GeoSearch]
     product_search: Optional[str]
@@ -99,35 +115,42 @@ class Config:
 
 
 def parse_datetime(datetime):
+    """Parse time(range) specifications.
+
+    Allows parsing of human formatted time(range)
+    specifications such as 'one month ago' to a datetime
+    """
     return dateparser.parse(datetime).replace(microsecond=0)
 
 
 converters = {
-        pathlib.Path: pathlib.Path,
-        datetime.datetime: lambda x: parse_datetime(x),
-        LogLevel: lambda x: LogLevel[x]
-        }
+    pathlib.Path: pathlib.Path,
+    datetime.datetime: lambda x: parse_datetime(x),
+    LogLevel: lambda x: LogLevel[x],
+}
 
 
 def get_config(args):
+    """Get configuration.
 
+    Get configuration from files, arguments and defaults.
+
+    """
     config_dict = {}
     config_file = None
 
     # Check that either config dir is set in environment or
     # config argument is used
-    if not any((os.environ.get('CAROLINE_DOWNLOAD_CONFIG_DIR'),
-                args.config)):
-        print('ERROR: No configuration specified. Aborting.', file=sys.stderr)
+    if not any((os.environ.get("CAROLINE_DOWNLOAD_CONFIG_DIR"), args.config)):
+        print("ERROR: No configuration specified. Aborting.", file=sys.stderr)
         sys.exit(1)
 
     # If CONFIG_DIR is set, set config file to
     # CONFIG_DIR/caroline_download.yml
-    if os.environ.get('CAROLINE_DOWNLOAD_CONFIG_DIR'):
+    if os.environ.get("CAROLINE_DOWNLOAD_CONFIG_DIR"):
         config_file = os.path.join(
-                os.environ['CAROLINE_DOWNLOAD_CONFIG_DIR'],
-                'caroline-download.yml'
-                )
+            os.environ["CAROLINE_DOWNLOAD_CONFIG_DIR"], "caroline-download.yml"
+        )
     # If config argument is used, use that config file in stead
     if args.config:
         config_file = args.config
@@ -135,34 +158,33 @@ def get_config(args):
     # Check that the config file exists before we read it
     if not os.path.exists(config_file):
         # Config file does not exist
-        print(f'ERROR: File not found: {config_file}', file=sys.stderr)
+        print(f"ERROR: File not found: {config_file}", file=sys.stderr)
         sys.exit(1)
 
     # Open config file and read into config_dict
-    with open(config_file, 'r') as config_file:
+    with open(config_file, "r") as config_file:
         config_dict = yaml.safe_load(config_file)
 
     if not any((args.geo_search, args.product_search)):
-        print('ERROR: You must use either the --geo-search '
-              + 'or the --product option.',
-              file=sys.stderr
-              )
+        print(
+            "ERROR: You must use either the --geo-search " + "or the --product option.",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     if args.geo_search:
         # Read yaml specified in argument and merge in config_dict
         if os.path.exists(args.geo_search):
-            with open(args.geo_search, 'r') as geo_search_file:
+            with open(args.geo_search, "r") as geo_search_file:
                 geo_search_dict = yaml.safe_load(geo_search_file)
             config_dict.update(geo_search_dict)
         else:
             print(f"File not found: {args.geo_search}", file=sys.stderr)
             sys.exit(1)
 
-    config = dacite.from_dict(data_class=Config,
-                              data=config_dict,
-                              config=dacite.Config(type_hooks=converters)
-                              )
+    config = dacite.from_dict(
+        data_class=Config, data=config_dict, config=dacite.Config(type_hooks=converters)
+    )
 
     if args.product_search:
         config.product_search = args.product_search
@@ -185,15 +207,17 @@ def get_config(args):
         config.logging.asf_logger.level = LogLevel[args.log_level.upper()]
 
     if args.quiet:
-        config.logging.console_log.level = LogLevel['NOTSET']
+        config.logging.console_log.level = LogLevel["NOTSET"]
 
     if config.geo_search:
         if not config.geo_search.roi_wkt_file.exists():
-            print(f"ERROR: No such file: {config.geo_search.roi_wkt_file}",
-                  file=sys.stderr
-                  )
+            print(
+                f"ERROR: No such file: {config.geo_search.roi_wkt_file}",
+                file=sys.stderr,
+            )
             sys.exit(1)
 
     return config
+
 
 # Eof
