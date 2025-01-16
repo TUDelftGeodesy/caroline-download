@@ -13,3 +13,9 @@ pip install git+https://github.com/TUDelftGeodesy/caroline-download.git@main
 ## Contributing
 
 See [CONTRIBUTING](./CONTRIBUTING.md).
+
+## License
+
+Copyright &copy; Delft University of Technology
+
+[Apache Software License 2.0](https://www.apache.org/licenses/LICENSE-2.0)

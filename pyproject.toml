@@ -45,6 +45,7 @@ dev = [
 docs = [
     "mkdocs",
     "mkdocs-material",
+    "mkdocstrings[python]",
 ]
 
 [project.scripts]
@@ -52,3 +53,10 @@ caroline-download = "caroline_download.cli:main"
 
 [project.urls]
 Homepage = "https://bitbucket.org/grsradartudelft/caroline-download/"
+
+[tool.ruff.lint]
+select = ["D"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+

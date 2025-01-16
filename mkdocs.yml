@@ -1,4 +1,4 @@
-site_name: Caroline Download Documentation
+site_name: CAROLINE Download
 repo_url: https://github.com/TUDelftGeodesy/caroline-download
 repo_name: caroline_download
 
@@ -6,22 +6,48 @@ theme:
   name: material
   palette:
     # Palette toggle for light mode
-    - scheme: default
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
       toggle:
-        icon: material/weather-sunny
+        icon: material/brightness-7
         name: Switch to dark mode
       primary: blue
       accent: white
 
     # Palette toggle for dark mode
-    - scheme: slate
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
       toggle:
-        icon: material/weather-night
+        icon: material/brightness-4
         name: Switch to light mode
       primary: black
       accent: pink
   features:
     - navigation.instant
-    - navigation.tabs
-    - navigation.tabs.sticky
+    #- navigation.tabs
+    #- navigation.tabs.sticky
     - content.code.copy
+
+nav:
+  - About: index.md
+  - Installation: installation.md
+  - Usage: usage.md
+  - Howto: howto.md
+  - API Reference: api_reference.md
+
+plugins:
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: numpy
+            docstring_options:
+              ignore_init_summary: no
+            merge_init_into_class: yes
+            show_submodules: no
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - def_list
