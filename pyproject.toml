@@ -62,3 +62,4 @@ select = ["D"]
 convention = "numpy"
 
 [tool.setuptools_scm]
+version_file = "_version.txt"
