@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61"]
+requires = ["setuptools>=64", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -62,4 +62,4 @@ select = ["D"]
 convention = "numpy"
 
 [tool.setuptools_scm]
-version_file = "_version.txt"
+version_file = "_version.py"
