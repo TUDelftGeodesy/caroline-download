@@ -104,7 +104,7 @@ geo_search:
 
 : Path to a file containing the ROI in wkt format.
 
-`relative_orbits`: [15, 37, 88, 110, 139, 161]
+`relative_orbits`:
 
 : The desired relative orbits or tracks within the ROI.
 
@@ -112,7 +112,7 @@ geo_search:
 
 : The desired product type. E.g. "SLC".
 
-### Authentication
+## Authentication
 
 Authentication for downloading is currently done with a [netrc file](https://www.gnu.org/software/inetutils/manual/html_node/The-_002enetrc-file.html)
 

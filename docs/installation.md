@@ -1,7 +1,8 @@
 # Installation
 
-You can install CAROLINE download using pip:
+You can use pip to install caroline-download:
 
 ```
-pip install git+https://github.com/TUDelftGeodesy/caroline-download.git@main
+pip install git+https://github.com/TUDelftGeodesy/caroline-download.git@v0.1.1
 ```
+
