@@ -219,7 +219,9 @@ def download_eodag_product(download_config, product):
 
     TODO Test this. Check geojson functionality.
     """
-    file_name = product.properties["productIdentifier"].split("/").pop()
+    file_name = (
+        str(product.properties["productIdentifier"].split("/").pop())[:-5] + ".zip"
+    )
     relative_orbit = str(product.properties["relativeOrbitNumber"])
     orbit_direction = product.properties["orbitDirection"]
     polarization = product.properties["polarizationChannels"].replace("&", "+")
@@ -249,7 +251,7 @@ def download_eodag_product(download_config, product):
         logger.debug(
             f"Target file: {target_file} already exists. "
             "Force option set. "
-            "Removing file: {target_file}"
+            f"Removing file: {target_file}"
         )
         if not download_config.dry_run:
             os.remove(target_file)
@@ -276,7 +278,7 @@ def download_eodag_product(download_config, product):
 
         # Write out the geojson to a file
         logger.debug(f"target_file: '{target_file}'")
-        product_geojson_file = str(target_file)[:-5] + ".json"
+        product_geojson_file = str(target_file)[:-4] + ".json"
         logger.debug(f"product_geojson_file: '{product_geojson_file}'")
         logger.info("Saving product geojson to " f"{product_geojson_file}")
         with open(product_geojson_file, "w") as f:
