@@ -233,26 +233,28 @@ def download_eodag_product(download_config, product):
     )
 
     target_file = target_directory.joinpath(file_name)
+    check_file = str(target_file)[:-5] + ".zip"
 
     logger.debug(f"Target directory: {target_directory}")
     logger.debug(f"Target file: {target_file}")
+    logger.debug(f"Checking file: {check_file}")
 
-    if os.path.isfile(target_file) and not download_config.force:
+    if os.path.isfile(check_file) and not download_config.force:
         logger.debug(
-            f"Target file: {target_file} already exists. "
+            f"Target file: {check_file} already exists. "
             "Force option not set. "
             "Skipping download"
         )
         return
 
-    if os.path.isfile(target_file) and download_config.force:
+    if os.path.isfile(check_file) and download_config.force:
         logger.debug(
-            f"Target file: {target_file} already exists. "
+            f"Target file: {check_file} already exists. "
             "Force option set. "
-            "Removing file: {target_file}"
+            f"Removing file: {check_file}"
         )
         if not download_config.dry_run:
-            os.remove(target_file)
+            os.remove(check_file)
 
     logger.debug("Creating directories")
     if not download_config.dry_run:
