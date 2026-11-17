@@ -90,6 +90,8 @@ class FileLog:
 
 @dataclass
 class Logging:
+    """Data class for logging configuration."""
+
     console_log: ConsoleLog = field(default_factory=ConsoleLog)
     file_log: FileLog = field(
         default_factory=lambda: FileLog(file=None)
