@@ -7,7 +7,7 @@ https://tech.preferred.jp/en/blog/working-with-configuration-in-python/
 """
 
 import datetime
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import logging
 from typing import List
 from typing import Optional
@@ -92,16 +92,18 @@ class FileLog:
 class Logging:
     """Data class for logging configuration."""
 
-    console_log: ConsoleLog = ConsoleLog(
-        enable=True, level=LogLevel[DEFAULT_LOG_LEVEL], format=DEFAULT_LOG_FORMAT
+    console_log: ConsoleLog = field(default_factory=ConsoleLog)
+    file_log: FileLog = field(
+        default_factory=lambda: FileLog(file=None)
     )
-    file_log: FileLog = FileLog(
-        file=None, level=LogLevel[DEFAULT_LOG_LEVEL], format=DEFAULT_LOG_FORMAT
+    root_logger: Logger = field(
+        default_factory=lambda: Logger(level=LogLevel.WARNING)
     )
-    root_logger: Logger = Logger(level=LogLevel["WARNING"])
-    cli_logger: Logger = Logger(level=LogLevel[DEFAULT_LOG_LEVEL])
-    download_logger: Logger = Logger(level=LogLevel[DEFAULT_LOG_LEVEL])
-    asf_logger: Logger = Logger(level=LogLevel["WARNING"])
+    cli_logger: Logger = field(default_factory=Logger)
+    download_logger: Logger = field(default_factory=Logger)
+    asf_logger: Logger = field(
+        default_factory=lambda: Logger(level=LogLevel.WARNING)
+    )
 
 
 @dataclass
@@ -111,7 +113,7 @@ class Config:
     download: Download
     geo_search: Optional[GeoSearch]
     product_search: Optional[str]
-    logging: Logging = Logging()
+    logging: Logging = field(default_factory=Logging)
 
 
 def parse_datetime(datetime):
